@@ -3,10 +3,11 @@ import hou
 
 
 def get_selection():
-    return hou.selectedNodes()
+    # return hou.selectedNodes()
+    return hou.node('/obj/subnet1').allSubChildren()
 
 def gen_selection():
-    for node in hou.selectedNodes():
+    for node in get_selection():
         yield node
 
 def main():
@@ -20,5 +21,5 @@ def main():
     print(s1 == s2)
     # print(s1)
     # print(s2)
-    print(type(selection), sys.getsizeof(selection))
-    print(type(sel), sys.getsizeof(sel))
+    print(type(selection), len(selection), sys.getsizeof(selection))
+    print(type(sel), len(list(sel)), sys.getsizeof(sel))
