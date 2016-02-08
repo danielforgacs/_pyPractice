@@ -13,6 +13,17 @@ class CamWrapper(object):
         super(CamWrapper, self).__setattr__(attr, value)
 
 
+class NodeWrapper(object):
+    def __init__(self, node):
+        self.node = pymel.core.PyNode(node)
+
+    def __getattr__(self, attr):
+        return self.node.getAttr(attr)
+
+    def __setattr__(self, attr, value):
+        super(NodeWrapper, self).__setattr__(attr, value)
+
+
 def main():
     cam = CamWrapper('camera1')
     print cam.shape
@@ -31,3 +42,11 @@ def main():
 
     # print cam.shape.focalLength
     # print cam.translateX
+
+    ######
+
+    cam2 = NodeWrapper('cameraShape1')
+    print cam2.focalLength
+    cam.focalLength = 95
+    print cam.focalLength
+    print cam2.focalLength
