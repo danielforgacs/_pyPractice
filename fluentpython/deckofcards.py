@@ -2,6 +2,7 @@ import collections
 
 Card = collections.namedtuple('Card', ['rank', 'suit'])
 
+class FrenchDeck:
 class FrenchDesk:
     ranks = [str(n) for n in range(2, 11)] + list('JQLA')
     suits = 'spades diamonds clubs hearts'.split()
