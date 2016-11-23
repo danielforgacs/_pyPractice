@@ -17,9 +17,13 @@ class Model(QtGui.QStandardItemModel):
 class TableView(QtGui.QTableView):
     def __init__(self, parent=None):
         super(TableView, self).__init__(parent)
-        self.model = Model()
+        # self.model = Model()
         self.setSortingEnabled(True)
-        self.setModel(self.model)
+        self.proxy = QtGui.QSortFilterProxyModel()
+        self.proxy.setSourceModel(Model())
+        # self.setModel(self.model)
+        self.setModel(self.proxy)
+        # self.setModel(QtGui.QSortFilterProxyModel().setSourceModel(self.model))
         self.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers)
         self.selectionModel().selectionChanged.connect(self.get_selection)
 
@@ -37,6 +41,9 @@ class MainWindow(QtGui.QWidget):
         self.table = TableView(self)
         self.layout = QtGui.QGridLayout()
         self.setLayout(self.layout)
+        self.filter = QtGui.QLineEdit()
+        self.filter.textChanged.connect(self.table.proxy.setFilterRegExp)
+        self.layout.addWidget(self.filter)
         self.layout.addWidget(self.table)
 
 
