@@ -1,5 +1,6 @@
 import sys
 from functools import partial
+from random import choice
 import lsm
 from PyQt4 import QtGui
 
@@ -12,8 +13,8 @@ class Button(QtGui.QPushButton):
 
 
 class MainWindow(QtGui.QWidget):
-    def __init__(self):
-        super(MainWindow, self).__init__()
+    def __init__(self, *args, **kwargs):
+        super(MainWindow, self).__init__(*args, **kwargs)
         button_layout = QtGui.QVBoxLayout()
         btn_new = Button(text='new')
         button_layout.addWidget(btn_new)
@@ -65,11 +66,13 @@ class MainWindow(QtGui.QWidget):
 
     def populate_model(self, model):
         for index, data_item in enumerate(lsm.get_data()):
-            row = [QtGui.QStandardItem(str(row_item)) for row_item in data_item]
+            row = [QtGui.QStandardItem(row_item)
+                        for row_item in data_item]
             model.appendRow(row)
 
     def create_item(self, model):
-        row = [QtGui.QStandardItem('hehe'), QtGui.QStandardItem('str(index)')]
+        item_name = choice(lsm.db)
+        row = [QtGui.QStandardItem(item_name), QtGui.QStandardItem(str(len(item_name)))]
         model.appendRow(row)
 
     def set_table_filter(self, modelproxy):
