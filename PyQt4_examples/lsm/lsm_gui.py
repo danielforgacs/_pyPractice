@@ -18,7 +18,8 @@ class MainWindow(QtGui.QWidget):
         button_layout = QtGui.QVBoxLayout()
         btn_new = Button(text='new')
         button_layout.addWidget(btn_new)
-        button_layout.addWidget(Button())
+        btn_delete = Button(text='delete')
+        button_layout.addWidget(btn_delete)
         button_layout.addWidget(Button())
         button_layout.addWidget(Button())
         button_layout.addWidget(Button())
@@ -55,7 +56,7 @@ class MainWindow(QtGui.QWidget):
         proxy.setSourceModel(model)
         table.setModel(proxy)
 
-        self.setGeometry(100, 100, 700, 800)
+        self.setGeometry(800, 80, 700, 900)
         self.setLayout(main_layout)
         self.show()
         self.populate_model(model)
@@ -63,6 +64,7 @@ class MainWindow(QtGui.QWidget):
         btn_new.clicked.connect(partial(self.create_item, model))
         filter_line.textChanged.connect(partial(self.set_table_filter, proxy))
         btn_filter_clear.clicked.connect(filter_line.clear)
+        btn_delete.clicked.connect(partial(self.get_selection, table))
 
     def populate_model(self, model):
         for index, data_item in enumerate(lsm.get_data()):
@@ -78,6 +80,15 @@ class MainWindow(QtGui.QWidget):
     def set_table_filter(self, modelproxy):
         filter_text = self.sender().text()
         modelproxy.setFilterFixedString(filter_text)
+
+    def get_selection(self, table):
+        model = table.selectedIndexes()[0].model().sourceModel()
+        # items = [str(index.data().toPyObject()) for index in table.selectedIndexes()]
+        # print table.selectedIndexes()[0].model().sourceModel()
+        items2 = [str(model.index(index.row(), 0).data().toPyObject())
+                    for index in table.selectedIndexes()]
+        # print items
+        print items2
 
 
 def main():
