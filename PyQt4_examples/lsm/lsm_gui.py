@@ -36,9 +36,9 @@ class MainWindow(QtGui.QWidget):
 
         filter_layout = QtGui.QHBoxLayout()
         filterstring = QtGui.QLineEdit()
-        button_filterclear = Button(text='clr', mini=True)
+        button_clearfilter = Button(text='clr', mini=True)
         filter_layout.addWidget(filterstring)
-        filter_layout.addWidget(button_filterclear)
+        filter_layout.addWidget(button_clearfilter)
 
         table_layout = QtGui.QVBoxLayout()
         tableview = QtGui.QTableView()
@@ -68,7 +68,7 @@ class MainWindow(QtGui.QWidget):
         self.show()
         self.populate_model(model)
 
-        button_filterclear.clicked.connect(filterstring.clear)
+        button_clearfilter.clicked.connect(filterstring.clear)
         button_new.clicked.connect(partial(self.create_new_item, model))
         button_delete.clicked.connect(partial(self.list_selection,
                                             tableview=tableview))
@@ -107,8 +107,11 @@ class MainWindow(QtGui.QWidget):
     def list_selection(self, tableview):
         item_set = {str(index.model().index(index.row(), 0).data().toPyObject())
                             for index in tableview.selectedIndexes()}
+        items = list(item_set)
+        print '--> selected items:'
+        print items
 
-        return list(item_set)
+        return items
 
     def show_item(self):
         tableview = self.sender()
