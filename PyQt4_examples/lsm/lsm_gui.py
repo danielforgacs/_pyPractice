@@ -59,9 +59,9 @@ class MainWindow(QtGui.QWidget):
         main_layout.addWidget(logwidget)
 
         model = QtGui.QStandardItemModel()
-        proxy = QtGui.QSortFilterProxyModel()
-        proxy.setSourceModel(model)
-        tableview.setModel(proxy)
+        proxymodel = QtGui.QSortFilterProxyModel()
+        proxymodel.setSourceModel(model)
+        tableview.setModel(proxymodel)
 
         self.setGeometry(800, 80, 700, 950)
         self.setLayout(main_layout)
@@ -69,10 +69,12 @@ class MainWindow(QtGui.QWidget):
         self.populate_model(model)
 
         button_filterclear.clicked.connect(filterstring.clear)
-        button_new.clicked.connect(partial(self.new_item, model))
-        button_delete.clicked.connect(partial(self.get_selection, tableview))
+        button_new.clicked.connect(partial(self.create_new_item, model))
+        button_delete.clicked.connect(partial(self.list_selection,
+                                            tableview=tableview))
 
-        filterstring.textChanged.connect(partial(self.set_table_filter, proxy))
+        filterstring.textChanged.connect(partial(self.set_tableview_filter,
+                                                proxymodel=proxymodel))
 
         tableview.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
         tableview.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers)
@@ -88,7 +90,7 @@ class MainWindow(QtGui.QWidget):
             if index == 7:
                 break
 
-    def new_item(self, model):
+    def create_new_item(self, model):
         newname = choice(lsm.db)
 
         for item in self.generate_model_items(model):
@@ -98,11 +100,11 @@ class MainWindow(QtGui.QWidget):
         row = [QtGui.QStandardItem(newname), QtGui.QStandardItem(str(len(newname)))]
         model.appendRow(row)
 
-    def set_table_filter(self, modelproxy):
+    def set_tableview_filter(self, proxymodel):
         filter_text = self.sender().text()
-        modelproxy.setFilterFixedString(filter_text)
+        proxymodel.setFilterFixedString(filter_text)
 
-    def get_selection(self, tableview):
+    def list_selection(self, tableview):
         item_set = {str(index.model().index(index.row(), 0).data().toPyObject())
                             for index in tableview.selectedIndexes()}
 
@@ -110,7 +112,7 @@ class MainWindow(QtGui.QWidget):
 
     def show_item(self):
         tableview = self.sender()
-        item_list = self.get_selection(tableview=tableview)
+        item_list = self.list_selection(tableview=tableview)
 
     def generate_model_items(self, model):
         for k in range(model.rowCount()):
