@@ -3,6 +3,7 @@ from functools import partial
 from random import choice
 import lsm
 from PyQt4 import QtGui
+from PyQt4 import QtCore
 
 
 class Button(QtGui.QPushButton):
@@ -10,6 +11,26 @@ class Button(QtGui.QPushButton):
         super(Button, self).__init__(*args, **kwargs)
         self.setMinimumWidth(150)
         self.setMinimumHeight(30)
+
+
+class NewDialog(QtGui.QDialog):
+    def __init__(self, parent=None):
+        QtGui.QDialog.__init__(self, parent)
+        self.button_ok = QtGui.QPushButton('Ok', self)
+        self.button_ok.clicked.connect(self.accept)
+        self.button_cancel = QtGui.QPushButton('Cancel', self)
+        self.button_cancel.clicked.connect(self.reject)
+        self.button_ok.setMinimumHeight(30)
+        self.button_cancel.setMinimumHeight(30)
+        # self.burrowsname_widget = BurrowsNameWidget(parent=self)
+        # self.valid_name = self.burrowsname_widget.valid_name
+        layout = QtGui.QGridLayout(self)
+        layout.addWidget(QtGui.QLineEdit(), 0, 0)
+        # layout.addWidget(self.burrowsname_widget, 0, 0)
+        layout.addWidget(self.button_ok, 1, 0)
+        layout.addWidget(self.button_cancel, 2, 0)
+        self.setWindowTitle('Name Judge')
+
 
 
 class MainWindow(QtGui.QWidget):
@@ -61,34 +82,50 @@ class MainWindow(QtGui.QWidget):
         self.show()
         self.populate_model(model)
 
-        btn_new.clicked.connect(partial(self.create_item, model))
-        filter_line.textChanged.connect(partial(self.set_table_filter, proxy))
         btn_filter_clear.clicked.connect(filter_line.clear)
+        btn_new.clicked.connect(partial(self.create_item, model))
         btn_delete.clicked.connect(partial(self.get_selection, table))
+
+        filter_line.textChanged.connect(partial(self.set_table_filter, proxy))
+
+        table.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
+        table.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers)
+        table.setSortingEnabled(True)
+
+        table.doubleClicked.connect(self.show_item)
 
     def populate_model(self, model):
         for index, data_item in enumerate(lsm.get_data()):
-            row = [QtGui.QStandardItem(row_item)
-                        for row_item in data_item]
+            row = [QtGui.QStandardItem(row_item) for row_item in data_item]
             model.appendRow(row)
 
     def create_item(self, model):
-        item_name = choice(lsm.db)
-        row = [QtGui.QStandardItem(item_name), QtGui.QStandardItem(str(len(item_name)))]
-        model.appendRow(row)
+        new_dialog = NewDialog()
+        # new_dialog.addWidget(Button('ok'))
+
+        if new_dialog.exec_() is QtGui.QDialog.Accepted:
+            print 'accepted'
+
+
+
+        # item_name = choice(lsm.db)
+        # row = [QtGui.QStandardItem(item_name), QtGui.QStandardItem(str(len(item_name)))]
+        # model.appendRow(row)
 
     def set_table_filter(self, modelproxy):
         filter_text = self.sender().text()
         modelproxy.setFilterFixedString(filter_text)
 
     def get_selection(self, table):
-        model = table.selectedIndexes()[0].model().sourceModel()
-        # items = [str(index.data().toPyObject()) for index in table.selectedIndexes()]
-        # print table.selectedIndexes()[0].model().sourceModel()
-        items2 = [str(model.index(index.row(), 0).data().toPyObject())
-                    for index in table.selectedIndexes()]
-        # print items
-        print items2
+        items = {str(index.model().index(index.row(), 0).data().toPyObject())
+                            for index in table.selectedIndexes()}
+
+        return list(items)
+
+    def show_item(self):
+        table = self.sender()
+        items = self.get_selection(table=table)
+        print items
 
 
 def main():
