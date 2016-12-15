@@ -1,46 +1,32 @@
 import sys
 from functools import partial
 from random import choice
-import lsm
 from PyQt4 import QtGui
 from PyQt4 import QtCore
+import lsm
 
 
 class Button(QtGui.QPushButton):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, mini=False, *args, **kwargs):
         super(Button, self).__init__(*args, **kwargs)
-        self.setMinimumWidth(150)
         self.setMinimumHeight(30)
 
-
-class NewDialog(QtGui.QDialog):
-    def __init__(self, parent=None):
-        QtGui.QDialog.__init__(self, parent)
-        self.button_ok = QtGui.QPushButton('Ok', self)
-        self.button_ok.clicked.connect(self.accept)
-        self.button_cancel = QtGui.QPushButton('Cancel', self)
-        self.button_cancel.clicked.connect(self.reject)
-        self.button_ok.setMinimumHeight(30)
-        self.button_cancel.setMinimumHeight(30)
-        # self.burrowsname_widget = BurrowsNameWidget(parent=self)
-        # self.valid_name = self.burrowsname_widget.valid_name
-        layout = QtGui.QGridLayout(self)
-        layout.addWidget(QtGui.QLineEdit(), 0, 0)
-        # layout.addWidget(self.burrowsname_widget, 0, 0)
-        layout.addWidget(self.button_ok, 1, 0)
-        layout.addWidget(self.button_cancel, 2, 0)
-        self.setWindowTitle('Name Judge')
+        if mini:
+            self.setMaximumWidth(45)
+        else:
+            self.setMinimumWidth(150)
 
 
 
 class MainWindow(QtGui.QWidget):
     def __init__(self, *args, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
+
         button_layout = QtGui.QVBoxLayout()
-        btn_new = Button(text='new')
-        button_layout.addWidget(btn_new)
-        btn_delete = Button(text='delete')
-        button_layout.addWidget(btn_delete)
+        button_new = Button(text='new')
+        button_delete = Button(text='delete')
+        button_layout.addWidget(button_new)
+        button_layout.addWidget(button_delete)
         button_layout.addWidget(Button())
         button_layout.addWidget(Button())
         button_layout.addWidget(Button())
@@ -50,82 +36,86 @@ class MainWindow(QtGui.QWidget):
 
         filter_layout = QtGui.QHBoxLayout()
         filter_line = QtGui.QLineEdit()
-        btn_filter_clear = QtGui.QPushButton('clr')
-        btn_filter_clear.setMaximumWidth(30)
+        button_filterclear = Button(text='clr', mini=True)
         filter_layout.addWidget(filter_line)
-        filter_layout.addWidget(btn_filter_clear)
+        filter_layout.addWidget(button_filterclear)
 
         table_layout = QtGui.QVBoxLayout()
-        table = QtGui.QTableView()
+        tableview = QtGui.QTableView()
         table_layout.addLayout(filter_layout)
-        table_layout.addWidget(table)
+        table_layout.addWidget(tableview)
 
         top_layout = QtGui.QHBoxLayout()
         top_layout.addLayout(button_layout)
         top_layout.addLayout(table_layout)
 
-        log = QtGui.QTextEdit()
-        log.setMaximumHeight(50)
+        logwidget = QtGui.QTextEdit()
+        logwidget.setMaximumHeight(100)
+        messagewidget = QtGui.QLineEdit()
 
         main_layout = QtGui.QVBoxLayout()
         main_layout.addLayout(top_layout)
-        main_layout.addWidget(QtGui.QLineEdit())
-        main_layout.addWidget(log)
+        main_layout.addWidget(messagewidget)
+        main_layout.addWidget(logwidget)
 
         model = QtGui.QStandardItemModel()
         proxy = QtGui.QSortFilterProxyModel()
         proxy.setSourceModel(model)
-        table.setModel(proxy)
+        tableview.setModel(proxy)
 
-        self.setGeometry(800, 80, 700, 900)
+        self.setGeometry(800, 80, 700, 950)
         self.setLayout(main_layout)
         self.show()
         self.populate_model(model)
 
-        btn_filter_clear.clicked.connect(filter_line.clear)
-        btn_new.clicked.connect(partial(self.create_item, model))
-        btn_delete.clicked.connect(partial(self.get_selection, table))
+        button_filterclear.clicked.connect(filter_line.clear)
+        button_new.clicked.connect(partial(self.new_item, model))
+        button_delete.clicked.connect(partial(self.get_selection, tableview))
 
         filter_line.textChanged.connect(partial(self.set_table_filter, proxy))
 
-        table.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
-        table.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers)
-        table.setSortingEnabled(True)
+        tableview.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
+        tableview.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers)
+        tableview.setSortingEnabled(True)
 
-        table.doubleClicked.connect(self.show_item)
+        tableview.doubleClicked.connect(self.show_item)
 
     def populate_model(self, model):
         for index, data_item in enumerate(lsm.get_data()):
             row = [QtGui.QStandardItem(row_item) for row_item in data_item]
             model.appendRow(row)
 
-    def create_item(self, model):
-        new_dialog = NewDialog()
-        # new_dialog.addWidget(Button('ok'))
+            if index == 7:
+                break
 
-        if new_dialog.exec_() is QtGui.QDialog.Accepted:
-            print 'accepted'
+    def new_item(self, model):
+        newname = choice(lsm.db)
 
+        for item in self.generate_model_items(model):
+            if newname == item:
+                return
 
-
-        # item_name = choice(lsm.db)
-        # row = [QtGui.QStandardItem(item_name), QtGui.QStandardItem(str(len(item_name)))]
-        # model.appendRow(row)
+        row = [QtGui.QStandardItem(newname), QtGui.QStandardItem(str(len(newname)))]
+        model.appendRow(row)
 
     def set_table_filter(self, modelproxy):
         filter_text = self.sender().text()
         modelproxy.setFilterFixedString(filter_text)
 
-    def get_selection(self, table):
-        items = {str(index.model().index(index.row(), 0).data().toPyObject())
-                            for index in table.selectedIndexes()}
+    def get_selection(self, tableview):
+        item_set = {str(index.model().index(index.row(), 0).data().toPyObject())
+                            for index in tableview.selectedIndexes()}
 
-        return list(items)
+        return list(item_set)
 
     def show_item(self):
-        table = self.sender()
-        items = self.get_selection(table=table)
-        print items
+        tableview = self.sender()
+        item_list = self.get_selection(tableview=tableview)
+
+    def generate_model_items(self, model):
+        for k in range(model.rowCount()):
+            yield model.index(k, 0).data().toPyObject()
+
 
 
 def main():
