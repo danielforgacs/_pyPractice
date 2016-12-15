@@ -82,6 +82,9 @@ class MainWindow(QtGui.QWidget):
 
         tableview.doubleClicked.connect(self.show_item)
 
+        tableview.verticalHeader().setVisible(False)
+        tableview.horizontalHeader().setResizeMode(QtGui.QHeaderView.Stretch)
+
     def populate_model(self, model):
         for index, data_item in enumerate(lsm.get_data()):
             row = [QtGui.QStandardItem(row_item) for row_item in data_item]
