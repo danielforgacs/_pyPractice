@@ -35,9 +35,9 @@ class MainWindow(QtGui.QWidget):
         button_layout.addWidget(Button())
 
         filter_layout = QtGui.QHBoxLayout()
-        filter_line = QtGui.QLineEdit()
+        filterstring = QtGui.QLineEdit()
         button_filterclear = Button(text='clr', mini=True)
-        filter_layout.addWidget(filter_line)
+        filter_layout.addWidget(filterstring)
         filter_layout.addWidget(button_filterclear)
 
         table_layout = QtGui.QVBoxLayout()
@@ -68,11 +68,11 @@ class MainWindow(QtGui.QWidget):
         self.show()
         self.populate_model(model)
 
-        button_filterclear.clicked.connect(filter_line.clear)
+        button_filterclear.clicked.connect(filterstring.clear)
         button_new.clicked.connect(partial(self.new_item, model))
         button_delete.clicked.connect(partial(self.get_selection, tableview))
 
-        filter_line.textChanged.connect(partial(self.set_table_filter, proxy))
+        filterstring.textChanged.connect(partial(self.set_table_filter, proxy))
 
         tableview.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
         tableview.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers)
