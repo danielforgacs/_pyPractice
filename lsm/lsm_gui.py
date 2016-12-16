@@ -49,14 +49,13 @@ class MainWindow(QtGui.QWidget):
         top_layout.addLayout(button_layout)
         top_layout.addLayout(table_layout)
 
-        logwidget = QtGui.QTextEdit()
-        logwidget.setMaximumHeight(100)
-        messagewidget = QtGui.QLineEdit()
+        self.logwidget = QtGui.QTextEdit()
+        self.logwidget.setMaximumHeight(175)
+        self.logwidget.setText('------------ Start ------------')
 
         main_layout = QtGui.QVBoxLayout()
         main_layout.addLayout(top_layout)
-        main_layout.addWidget(messagewidget)
-        main_layout.addWidget(logwidget)
+        main_layout.addWidget(self.logwidget)
 
         model = QtGui.QStandardItemModel()
         proxymodel = QtGui.QSortFilterProxyModel()
@@ -86,22 +85,30 @@ class MainWindow(QtGui.QWidget):
         tableview.horizontalHeader().setResizeMode(QtGui.QHeaderView.Stretch)
 
     def populate_model(self, model):
+        self.update_log('--> populating model...')
+
         for index, data_item in enumerate(lsm.get_data()):
             row = [QtGui.QStandardItem(row_item) for row_item in data_item]
             model.appendRow(row)
+
+            self.update_log('\tadded ite:'+data_item[0])
 
             if index == 7:
                 break
 
     def create_new_item(self, model):
+        self.update_log('--> creating new item...')
         newname = choice(lsm.db)
 
-        for item in self.generate_model_items(model):
-            if newname == item:
+        for oldname in self.generate_model_items(model):
+            if newname == oldname:
+                self.update_log('\titem is duplicate:'+newname)
                 return
 
         row = [QtGui.QStandardItem(newname), QtGui.QStandardItem(str(len(newname)))]
         model.appendRow(row)
+        self.update_log('\tadded item: '+newname)
+
 
     def set_tableview_filter(self, proxymodel):
         filter_text = self.sender().text()
@@ -112,6 +119,7 @@ class MainWindow(QtGui.QWidget):
                             for index in tableview.selectedIndexes()}
         items = list(item_set)
         print '--> selected items:'
+        self.update_log('--> selected items:')
         print items
 
         return items
@@ -123,6 +131,13 @@ class MainWindow(QtGui.QWidget):
     def generate_model_items(self, model):
         for k in range(model.rowCount()):
             yield model.index(k, 0).data().toPyObject()
+
+    def update_log(self, message):
+        loghistory = self.logwidget.toPlainText()
+        newlog = loghistory + '\n' + message
+        self.logwidget.setText(newlog)
+        self.logwidget.moveCursor(QtGui.QTextCursor.End)
+
 
 
 
