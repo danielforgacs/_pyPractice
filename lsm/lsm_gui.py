@@ -91,7 +91,7 @@ class MainWindow(QtGui.QWidget):
         main_layout.addLayout(top_layout)
         main_layout.addWidget(self.log)
 
-        model = QtGui.QStandardItemModel()
+        model = QtGui.QStandardItemModel(1, 2)
         proxymodel = QtGui.QSortFilterProxyModel()
         proxymodel.setSourceModel(model)
         tableview.setModel(proxymodel)
@@ -121,13 +121,15 @@ class MainWindow(QtGui.QWidget):
     def populate_model(self, model):
         self.log.entry = 'populating model:'
 
-        for index, data_item in enumerate(lsm.get_data()):
-            row = [QtGui.QStandardItem(row_item) for row_item in data_item]
-            model.appendRow(row)
-            self.log.tab_entry = 'added item:'+data_item[0]
-
-            if index == 7:
+        for row, data_item in enumerate(lsm.get_data()):
+            if row == 7:
                 break
+
+            model.setRowCount(row+1)
+
+            for column in range(model.columnCount()):
+                index = model.index(row, column, QtCore.QModelIndex())
+                model.setData(index, data_item[column])
 
     def create_new_item(self, model):
         self.log.entry = 'creating new item'
