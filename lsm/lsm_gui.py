@@ -168,6 +168,7 @@ class MainWindow(QtGui.QWidget):
 
 def main():
     app = QtGui.QApplication(sys.argv)
+    app.setStyle('cleanLooks')
     gui = MainWindow()
     sys.exit(app.exec_())
 
