@@ -65,17 +65,14 @@ class MainWindow(QtGui.QWidget):
         button_showselected = Button(text='show selected')
         button_layout.addWidget(button_new)
         button_layout.addWidget(button_showselected)
-        button_layout.addWidget(Button())
-        button_layout.addWidget(Button())
-        button_layout.addWidget(Button())
-        button_layout.addWidget(Button())
         button_layout.addStretch()
-        button_layout.addWidget(Button())
+        button_layout.addWidget(Button('help'))
 
         filter_layout = QtGui.QHBoxLayout()
-        filterstring = QtGui.QLineEdit()
+        filter_line = QtGui.QLineEdit()
         button_clearfilter = Button(text='clr', mini=True)
-        filter_layout.addWidget(filterstring)
+        filter_layout.addWidget(QtGui.QLabel('filter:'))
+        filter_layout.addWidget(filter_line)
         filter_layout.addWidget(button_clearfilter)
 
         table_layout = QtGui.QVBoxLayout()
@@ -101,11 +98,11 @@ class MainWindow(QtGui.QWidget):
         self.show()
         self.populate_model(model)
 
-        button_clearfilter.clicked.connect(filterstring.clear)
+        button_clearfilter.clicked.connect(filter_line.clear)
         button_new.clicked.connect(partial(self.create_new_item, model))
         button_showselected.clicked.connect(partial(self.list_selection,
                                             tableview=tableview))
-        filterstring.textChanged.connect(partial(self.set_tableview_filter,
+        filter_line.textChanged.connect(partial(self.set_tableview_filter,
                                                 proxymodel=proxymodel))
         tableview.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
         tableview.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers)
