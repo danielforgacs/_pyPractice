@@ -55,18 +55,33 @@ class LogWidget(QtGui.QTextEdit):
         self.tab_entry = list_string
 
 
+class ButtonsWidget(QtGui.QWidget):
+    def __init__(self):
+        super(ButtonsWidget, self).__init__()
+        button_new = Button(text='new')
+        button_layout = QtGui.QVBoxLayout()
+        button_layout.addWidget(button_new)
+        self.setLayout(button_layout)
+
+
 class MainWindow(QtGui.QWidget):
     def __init__(self, *args, **kwargs):
         super(MainWindow, self).__init__(*args, **kwargs)
         self.log = LogWidget()
 
-        button_layout = QtGui.QVBoxLayout()
-        button_new = Button(text='new')
-        button_showselected = Button(text='show selected')
-        button_layout.addWidget(button_new)
-        button_layout.addWidget(button_showselected)
-        button_layout.addStretch()
-        button_layout.addWidget(Button('help'))
+        # button_layout = QtGui.QVBoxLayout()
+        # button_new = Button(text='new')
+        # button_showselected = Button(text='show selected')
+        # button_1 = Button(text='1')
+        # button_2 = Button(text='2')
+        # button_layout.addWidget(button_new)
+        # button_layout.addWidget(button_showselected)
+        # button_layout.addWidget(button_1)
+        # button_layout.addWidget(button_2)
+        # button_layout.addStretch()
+        # button_layout.addWidget(Button('help'))
+
+        widget_buttons = ButtonsWidget()
 
         filter_layout = QtGui.QHBoxLayout()
         filter_line = QtGui.QLineEdit()
@@ -81,7 +96,8 @@ class MainWindow(QtGui.QWidget):
         table_layout.addWidget(tableview)
 
         top_layout = QtGui.QHBoxLayout()
-        top_layout.addLayout(button_layout)
+        # top_layout.addLayout(button_layout)
+        top_layout.addWidget(widget_buttons)
         top_layout.addLayout(table_layout)
 
         main_layout = QtGui.QVBoxLayout()
@@ -98,10 +114,10 @@ class MainWindow(QtGui.QWidget):
         self.show()
         self.populate_model(model)
 
-        button_clearfilter.clicked.connect(filter_line.clear)
-        button_new.clicked.connect(partial(self.create_new_item, model))
-        button_showselected.clicked.connect(partial(self.list_selection,
-                                            tableview=tableview))
+        # button_clearfilter.clicked.connect(filter_line.clear)
+        # button_new.clicked.connect(partial(self.create_new_item, model))
+        # button_showselected.clicked.connect(partial(self.list_selection,
+        #                                     tableview=tableview))
         filter_line.textChanged.connect(partial(self.set_tableview_filter,
                                                 proxymodel=proxymodel))
         tableview.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
@@ -109,7 +125,7 @@ class MainWindow(QtGui.QWidget):
         tableview.setSortingEnabled(True)
 
         tableview.doubleClicked.connect(partial(self.show_item, tableview))
-        button_showselected.clicked.connect(partial(self.show_item, tableview))
+        # button_showselected.clicked.connect(partial(self.show_item, tableview))
 
         tableview.verticalHeader().setVisible(False)
         tableview.horizontalHeader().setResizeMode(QtGui.QHeaderView.Stretch)
