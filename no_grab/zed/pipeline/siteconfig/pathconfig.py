@@ -7,6 +7,6 @@ best option: add to PYTHONPATH
 
 import os
 
-deployedpath = ''
+deployroot = 'd:/dev/pyLearn/no_grab/zed/pipeline/library'
 databasetools = 'd:/dev/pyLearn/no_grab/zed/pipeline/library/backend'
-# os.sys.path.append()
+os.sys.path.append(databasetools)
