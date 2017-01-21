@@ -1,6 +1,8 @@
 """
 siteconfig path must be always visible
 from anywhere.
+
+best option: add to PYTHONPATH
 """
 
 import os
