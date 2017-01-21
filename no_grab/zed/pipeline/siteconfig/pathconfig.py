@@ -23,6 +23,9 @@ paths = []
 for module in modules:
     root = deployroot
     modulepath = os.path.join(root, modules[module])
-    paths.append(module)
+    paths.append(modulepath)
+
+print '--> pipeline paths:'
+listprint(paths)
 
 os.sys.path.extend(paths)
