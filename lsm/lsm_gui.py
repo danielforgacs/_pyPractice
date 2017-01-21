@@ -1,0 +1,187 @@
+import sys
+from functools import partial
+from random import choice
+from PyQt4 import QtGui
+from PyQt4 import QtCore
+import lsm
+
+
+class Button(QtGui.QPushButton):
+    def __init__(self, mini=False, *args, **kwargs):
+        super(Button, self).__init__(*args, **kwargs)
+        self.setMinimumHeight(30)
+
+        if mini:
+            self.setMaximumWidth(45)
+        else:
+            self.setMinimumWidth(150)
+
+
+class LogWidget(QtGui.QTextEdit):
+    def __init__(self, *args, **kwargs):
+        super(LogWidget, self).__init__(*args, **kwargs)
+        self.setMaximumHeight(175)
+
+    @property
+    def history(self):
+        return self.toPlainText() + '\n'
+
+    @property
+    def entry(self):
+        pass
+
+    @entry.setter
+    def entry(self, text):
+        # self.setText(self.history+'--> '+text)
+        self.setText(self.history+text)
+        self.moveCursor(QtGui.QTextCursor.End)
+
+    @property
+    def tab_entry(self):
+        pass
+
+    @tab_entry.setter
+    def tab_entry(self, text):
+        self.setText(self.history+'        '+text)
+        self.moveCursor(QtGui.QTextCursor.End)
+
+    @property
+    def list_entry(self):
+        pass
+
+    @list_entry.setter
+    def list_entry(self, entries):
+        list_string = ', '.join(entries)
+        self.tab_entry = list_string
+
+
+class ButtonsWidget(QtGui.QWidget):
+    def __init__(self):
+        super(ButtonsWidget, self).__init__()
+        self.button_new = Button(text='new')
+        self.button_showselected = Button(text='show selected')
+        button_1 = Button(text='1')
+        button_2 = Button(text='2')
+        button_help = Button(text='help')
+        button_layout = QtGui.QVBoxLayout()
+        button_layout.addWidget(self.button_new)
+        button_layout.addWidget(self.button_showselected)
+        button_layout.addWidget(button_1)
+        button_layout.addWidget(button_2)
+        button_layout.addStretch()
+        button_layout.addWidget(button_help)
+        self.setLayout(button_layout)
+
+
+class MainWindow(QtGui.QWidget):
+    def __init__(self, *args, **kwargs):
+        super(MainWindow, self).__init__(*args, **kwargs)
+        self.log = LogWidget()
+        widget_buttons = ButtonsWidget()
+
+        filter_layout = QtGui.QHBoxLayout()
+        filter_line = QtGui.QLineEdit()
+        button_clearfilter = Button(text='clr', mini=True)
+        filter_layout.addWidget(QtGui.QLabel('filter:'))
+        filter_layout.addWidget(filter_line)
+        filter_layout.addWidget(button_clearfilter)
+
+        table_layout = QtGui.QVBoxLayout()
+        tableview = QtGui.QTableView()
+        table_layout.addLayout(filter_layout)
+        table_layout.addWidget(tableview)
+
+        top_layout = QtGui.QHBoxLayout()
+        top_layout.addWidget(widget_buttons)
+        top_layout.addLayout(table_layout)
+
+        main_layout = QtGui.QVBoxLayout()
+        main_layout.addLayout(top_layout)
+        main_layout.addWidget(self.log)
+
+        model = QtGui.QStandardItemModel(1, 2)
+        proxymodel = QtGui.QSortFilterProxyModel()
+        proxymodel.setSourceModel(model)
+        tableview.setModel(proxymodel)
+
+        self.setGeometry(800, 80, 700, 950)
+        self.setLayout(main_layout)
+        self.show()
+        self.populate_model(model)
+
+        button_clearfilter.clicked.connect(filter_line.clear)
+        widget_buttons.button_new.clicked.connect(partial(self.create_new_item, model))
+        widget_buttons.button_showselected.clicked.connect(partial(self.list_selection,
+                                            tableview=tableview))
+        filter_line.textChanged.connect(partial(self.set_tableview_filter,
+                                                proxymodel=proxymodel))
+        tableview.setSelectionBehavior(QtGui.QAbstractItemView.SelectRows)
+        tableview.setEditTriggers(QtGui.QAbstractItemView.NoEditTriggers)
+        tableview.setSortingEnabled(True)
+
+        tableview.doubleClicked.connect(partial(self.show_item, tableview))
+        # button_showselected.clicked.connect(partial(self.show_item, tableview))
+
+        tableview.verticalHeader().setVisible(False)
+        tableview.horizontalHeader().setResizeMode(QtGui.QHeaderView.Stretch)
+        model.setHorizontalHeaderLabels(['item', 'length'])
+
+    def populate_model(self, model):
+        self.log.entry = 'populating model:'
+
+        for row, data_item in enumerate(lsm.get_data()):
+            if row == 7:
+                break
+
+            model.setRowCount(row+1)
+
+            for column in range(model.columnCount()):
+                index = model.index(row, column, QtCore.QModelIndex())
+                model.setData(index, data_item[column])
+
+    def create_new_item(self, model):
+        self.log.entry = 'creating new item'
+        newname = choice(lsm.db)
+
+        for oldname in self.generate_model_items(model):
+            if newname == oldname:
+                self.log.tab_entry = 'item is duplicate: '+newname
+                return
+
+        row = [QtGui.QStandardItem(newname), QtGui.QStandardItem(str(len(newname)))]
+        model.appendRow(row)
+        self.log.tab_entry = 'added item: '+newname
+
+    def set_tableview_filter(self, proxymodel):
+        filter_text = self.sender().text()
+        proxymodel.setFilterFixedString(filter_text)
+        self.log.entry = 'filter set to: ' + filter_text
+
+    def list_selection(self, tableview):
+        self.log.entry = 'listing selection:'
+        item_set = {str(index.model().index(index.row(), 0).data().toPyObject())
+                            for index in tableview.selectedIndexes()}
+        items = list(item_set)
+        self.log.list_entry = items
+
+        return items
+
+    def show_item(self, tableview):
+        item_list = self.list_selection(tableview=tableview)
+        self.log.entry = 'showing items'
+        self.log.list_entry = item_list
+
+    def generate_model_items(self, model):
+        for k in range(model.rowCount()):
+            yield model.index(k, 0).data().toPyObject()
+
+
+def main():
+    app = QtGui.QApplication(sys.argv)
+    app.setStyle('cleanLooks')
+    gui = MainWindow()
+    sys.exit(app.exec_())
+
+
+if __name__ == '__main__':
+    main()
