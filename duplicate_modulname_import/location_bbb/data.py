@@ -1,1 +1,1 @@
-datadict = {'bbb': 2}
+datadict = {'bbb': 2, 'BBB': 'only'}
