@@ -24,8 +24,19 @@ if devroot:
     os.sys.path.insert(0, devroot)
     print '--> devroot is set:', devroot
 
+    try:
+        import devcon
+    except:
+        devcon = None
+
 for module in modules:
     root = deployroot
+
+    if devcon and hasattr(devcon, 'devimports'):
+        if module in devcon.devimports:
+            print '--> !!! Module is imported as dev:', module
+            root = devroot
+
     modulepath = os.path.join(root, modules[module])
     paths.append(modulepath)
 
