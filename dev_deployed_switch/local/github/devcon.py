@@ -1,3 +1,0 @@
-devimports = (
-    'backend',
-)
