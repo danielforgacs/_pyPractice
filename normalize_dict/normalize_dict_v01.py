@@ -1,13 +1,8 @@
 from pprint import pprint
 
 db = {
-    '1': {'2': {'3': '4'}}
-}
-
-db = {
     '1': {'2': {'3': '4'}},
     '2': {'22': {'33': '44'}},
-    '3': '33'
 }
 
 newdict = {}
@@ -35,9 +30,9 @@ def flatter(dict_, basekey='', newdict={}):
             flat_key = basekey + '_' + key
 
         flat_value = value
-        print('\t', key)
-        print('\t', value)
-        print('\t', flat_key)
+        # print('\t', key)
+        # print('\t', value)
+        # print('\t', flat_key)
 
         if isinstance(value, dict):
             flatter(value, flat_key)
@@ -49,8 +44,7 @@ def flatter(dict_, basekey='', newdict={}):
 
 
 
-# pprint(newdict)
-# print
 result = flatter(db)
-print(type(result))
 pprint(result)
+print(result.keys())
+print(result.values())
