@@ -3,6 +3,9 @@ from pprint import pprint
 db = {
     '1': {'2': {'3': '4'}},
     '2': {'22': {'33': '44'}},
+    '3': [333, 444, 555],
+    4: 4,
+    5: {55: {555: 55555}}
 }
 
 # if isinstance({'1': {'2': {'3': '4'}}}, dict):
@@ -21,7 +24,7 @@ def flatter(dict_, basekey='', newdict={}):
         if not basekey:
             flat_key = key
         else:
-            flat_key = basekey + '_' + key
+            flat_key = str(basekey) + '_' + str(key)
 
         flat_value = value
 
@@ -35,6 +38,7 @@ def flatter(dict_, basekey='', newdict={}):
 
 
 result = flatter(db)
+print(list(result.keys()))
+print(list(result.values()))
+print()
 pprint(result)
-print(result.keys())
-print(result.values())
