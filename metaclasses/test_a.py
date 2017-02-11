@@ -1,10 +1,15 @@
-class Meta(type):
+class MyMeta(type):
     pass
+    def __new__(meta, name, bases, dict_):
+        print '--> meta:', meta
+        print '--> meta type:', type(meta)
+        return super(MyMeta, meta).__new__(meta, name, bases, dict_)
 
 class Klass():
     pass
 
 class KlassObj(object):
+    __metaclass__ = MyMeta
     pass
 
 
