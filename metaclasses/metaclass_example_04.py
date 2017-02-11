@@ -38,5 +38,11 @@ class MyVector(object):
     def calculateTripleProduct(self, other):
         pass
 
+    def someOtherMethod(self):
+        pass
+
+    def longMethNameWLotOfUpperCase(self):
+        pass
+
 
 print([a for a in dir(MyVector) if not a.startswith('__')])
