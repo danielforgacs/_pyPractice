@@ -5,8 +5,7 @@ def convert(name):
     return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
 
 def camel_to_snake_case(name, bases, attrs):
-    print('Calling the metaclass'
-        'camel_to_snake_case to construct class: {}'.format(name))
+    # print attrs
 
     snake_attrs = {}
 
@@ -21,20 +20,6 @@ def camel_to_snake_case(name, bases, attrs):
 
 
 class MyVector(object):
-    __metaclass__ = camel_to_snake_case
-
-    def addToVector(self, other):
-        pass
-
-    def subtractFromVector(self, other):
-        pass
-
-    def calculateDotProduct(self, other):
-        pass
-
-    def calculateCrossProduct(self, other):
-        pass
-
     def calculateTripleProduct(self, other):
         pass
 
@@ -45,4 +30,11 @@ class MyVector(object):
         pass
 
 
-print([a for a in dir(MyVector) if not a.startswith('__')])
+class NewVector(MyVector):
+    print dir()
+    __metaclass__ = camel_to_snake_case
+    print dir()
+    pass
+
+
+# print([a for a in dir(NewVector) if not a.startswith('__')])
