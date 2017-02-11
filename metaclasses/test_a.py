@@ -3,14 +3,22 @@ class MyMeta(type):
     def __new__(meta, name, bases, dict_):
         print '--> meta:', meta
         print '--> meta type:', type(meta)
+        print '--> name:', name
+        print '--> name type:', type(name)
+        print '--> bases:', bases
+        print '--> bases type:', type(bases)
+        print '--> meta dict_:', dict_
         return super(MyMeta, meta).__new__(meta, name, bases, dict_)
 
 class Klass():
     pass
+    stuff = 1
 
 class KlassObj(object):
-    __metaclass__ = MyMeta
     pass
+    __metaclass__ = MyMeta
+    stuff = 1
+
 
 
 
@@ -37,3 +45,7 @@ if __name__ == '__main__':
 
     # print 'dir c.__sizeof__:'.ljust(25, '.'), c.__sizeof__
     print 'dir cobj.__sizeof__():'.ljust(25, '.'), cobj.__sizeof__()
+
+    print
+    print '--> klassobj stuff:', KlassObj.stuff
+    print '--> klassobj stuff:', type(KlassObj.stuff)
