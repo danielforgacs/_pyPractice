@@ -1,7 +1,7 @@
 class Descriptor(object):
-    def __init__(self, *args, **kwargs):
-        print(args)
-        print(kwargs)
+    # def __init__(self, *args, **kwargs):
+    #     print(args)
+    #     print(kwargs)
     #     self.value = 0
     #     # instance.__dict__['k'] = None
 
@@ -37,6 +37,7 @@ print(x.attr)
 x.attr = 3
 print(s.attr)
 print(x.attr)
+print(type(x.attr))
 x.attr = -1
 print(s.attr)
 print(x.attr)
