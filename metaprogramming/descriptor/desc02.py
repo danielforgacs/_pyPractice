@@ -16,15 +16,17 @@ class Descriptor(object):
         instance.__dict__['k'] = value
 
     def __delete__(self, instance):
+        # raise Exception
         pass
+        del instance.__dict__['k']
 
 
 class Strange(object):
     attr = Descriptor()
     # attr = None
 
-    # def __init__(self):
-    #     self.attr = None
+    def __init__(self):
+        self.attr = 'stuff'
 
 
 
@@ -38,6 +40,8 @@ print(x.attr)
 x.attr = -1
 print(s.attr)
 print(x.attr)
+print(x.__dict__)
+del x.attr
 print(x.__dict__)
 # s.attr = 'k'
 # print(s.attr)
