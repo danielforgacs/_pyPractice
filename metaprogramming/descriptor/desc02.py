@@ -1,14 +1,19 @@
 class Descriptor(object):
-    def __init__(self):
-        self.value = 0
+    def __init__(self, *args, **kwargs):
+        print(args)
+        print(kwargs)
+    #     self.value = 0
+    #     # instance.__dict__['k'] = None
 
     def __get__(self, instance, cls):
         # return self.value
-        getattr(instance, 'attr')
+        # getattr(instance, 'attr')
+        return instance.__dict__.get('k')
 
     def __set__(self, instance, value):
-        setattr(instance, 'attr', value)
+        # setattr(instance, 'attr', value)
         # self.value = value
+        instance.__dict__['k'] = value
 
     def __delete__(self, instance):
         pass
@@ -30,9 +35,10 @@ print(x.attr)
 x.attr = 3
 print(s.attr)
 print(x.attr)
-# x.attr = -1
-# print(s.attr)
-# print(x.attr)
+x.attr = -1
+print(s.attr)
+print(x.attr)
+print(x.__dict__)
 # s.attr = 'k'
 # print(s.attr)
 # print(x.attr)
