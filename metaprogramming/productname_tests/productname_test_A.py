@@ -27,18 +27,32 @@ class SizedString(Descriptor):
             raise AttributeError('==> TOO LONG.')
         super().__set__(instance, value)
 
-class Name(StringTyped, SizedString):
+class Chooser(StringTyped, SizedString):
+    choices = ('AAA', 'BBB', 'c', 5)
+
+    def __set__(self, instance, value):
+        if value not in self.choices:
+            raise AttributeError('==> MUST BE: '+str(self.choices))
+        super().__set__(instance, value)
+
+# class Name(StringTyped, SizedString):
+class Name(Chooser):
     pass
+
+# class NameChooser(Name, Chooser):
+#     pass
 
 class ProductName(object):
     pass
     name = Name(attrname='name')
+    nb = Name(attrname='nb')
     # year = Year(attrname='year')
 
 if __name__ == '__main__':
     p = ProductName()
     # print(p.__dict__)
-    p.name = '1'
+    p.name = 'c'
+    p.nb = 'c'
     print(p.__dict__)
     # p.name = 1
     # print(p.__dict__)
