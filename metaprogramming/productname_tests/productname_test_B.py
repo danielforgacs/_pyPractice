@@ -9,30 +9,26 @@ class Descriptor(object):
         # print(instance.__dict__)
         instance.__dict__[self.name] = value
 
-
 class Opted(Descriptor):
     def __set__(self, instance, value):
         if value not in self.opts:
-            pass
-            # raise ValueError('===> NOT IN OPTIONS.')
-            # instance.__dict__['bad'].add(value)
-
+            instance.__dict__['bad'] = instance.__dict__['bad'] | {self.name}
+        else:
+            instance.__dict__['bad'] = instance.__dict__['bad'] - {self.name}
         super().__set__(instance, value)
 
 class Region(Opted):
     opts = ('usa', 'ger')
+class Year(Opted):
+    opts = ('15', '16', '17')
 
-class NameBase(type):
-    # bad = None
-    def __new__(cls, name, bases, dict_):
-        dict_.update({'bad': None})
-        # print(dict_)
-        return type(name, bases, dict_)
+class BadContainer(object):
+    def __init__(self):
+        self.bad = set()
 
-# class VarName(object):
-class VarName(metaclass=NameBase):
+class VarName(BadContainer):
     region = Region(name='region')
-    # year =
+    year = Year(name='year')
 
 
 
@@ -45,11 +41,30 @@ variant_b = VarName()
 # print(variant.__dict__)
 variant.region = 'ger'
 variant_b.region = 'usa'
-variant_b.region = 'x'
+print(variant.__dict__)
+print(variant_b.__dict__)
+# variant_b.region = 'x'
 # variant_b.bad = 999
 # print(variant.region)
-print(variant.__dict__)
+# variant.region = 'ger'
 # print(variant.bad)
 # print(variant_b.region)
-print(variant_b.__dict__)
 # print(variant_b.bad)
+variant_b.region = 'x'
+print(variant_b.__dict__)
+variant_b.region = 'usa'
+print(variant_b.__dict__)
+
+variant_b.year = 'x'
+print(variant.__dict__)
+print(variant_b.__dict__)
+variant_b.region = 'usa'
+print(variant.__dict__)
+print(variant_b.__dict__)
+
+variant_b.year = '17'
+print(variant.__dict__)
+print(variant_b.__dict__)
+variant_b.region = 'd'
+print(variant.__dict__)
+print(variant_b.__dict__)
