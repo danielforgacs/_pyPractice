@@ -1,5 +1,5 @@
 class Descriptor(object):
-    def __init__(self, name=None):
+    def __init__(self, name):
         self.name = name
 
     def __get__(self, instance, cls):
@@ -14,13 +14,11 @@ class Descriptor(object):
 
 class NameDescriptor(object):
     def __get__(self, instance, cls):
-        pass
         if not instance.__dict__['bad']:
-            name = '_'.join([
-                instance.__dict__['region'],
-                instance.__dict__['year'],
-            ])
+            name = '_'.join([instance.__dict__[key] for key in self.elementorder])
             return name
+        else:
+            return None
 
     def __set__(self, instance, value):
         raise AttributeError('===> NAME IS READ ONLY!')
@@ -35,10 +33,13 @@ class Region(Descriptor):
 class Year(Descriptor):
     opts = ('15', '16', '17')
 
+class VarnameDescriptor(NameDescriptor):
+    elementorder = ('region', 'year',)
+
 class VarName(BadContainer):
+    name = VarnameDescriptor()
     region = Region(name='region')
     year = Year(name='year')
-    name = NameDescriptor()
 
     def __init__(self, name=None, year=None):
         super().__init__()
@@ -47,10 +48,6 @@ class VarName(BadContainer):
         for elem in elements:
             if elem != 'name':
                 setattr(self, elem, None)
-
-    # @property
-    # def name(self):
-    #     pass
 
 variant = VarName()
 # variant_b = VarName()
