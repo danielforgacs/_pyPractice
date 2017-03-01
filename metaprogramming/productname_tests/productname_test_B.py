@@ -29,11 +29,13 @@ class VarName(BadContainer):
 
     def __init__(self, name=None, year=None):
         super().__init__()
-        self.region = name
-        self.year = year
+        elements = [elem for elem in type(self).__dict__.keys()
+                    if not elem.startswith('__')]
+        for elem in elements:
+            setattr(self, elem, None)
 
 variant = VarName()
-variant_b = VarName()
+# variant_b = VarName()
 print(variant.__dict__)
 # print(VarName.__dict__)
 # print(VarName.__dict__)
