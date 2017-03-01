@@ -12,9 +12,21 @@ class Descriptor(object):
             instance.__dict__['bad'] = instance.__dict__['bad'] - {self.name}
         instance.__dict__[self.name] = value
 
+class NameDescriptor(object):
+    def __get__(self, instance, cls):
+        pass
+        if not instance.__dict__['bad']:
+            name = '_'.join([
+                instance.__dict__['region'],
+                instance.__dict__['year'],
+            ])
+            return name
+
+    def __set__(self, instance, value):
+        raise AttributeError('===> NAME IS READ ONLY!')
+
 class BadContainer(object):
     def __init__(self):
-        # print(self.__dict__)
         self.bad = set()
 
 class Region(Descriptor):
@@ -26,23 +38,36 @@ class Year(Descriptor):
 class VarName(BadContainer):
     region = Region(name='region')
     year = Year(name='year')
+    name = NameDescriptor()
 
     def __init__(self, name=None, year=None):
         super().__init__()
         elements = [elem for elem in type(self).__dict__.keys()
                     if not elem.startswith('__')]
         for elem in elements:
-            setattr(self, elem, None)
+            if elem != 'name':
+                setattr(self, elem, None)
+
+    # @property
+    # def name(self):
+    #     pass
 
 variant = VarName()
 # variant_b = VarName()
 print(variant.__dict__)
-# print(VarName.__dict__)
-# print(VarName.__dict__)
-# print(variant.__dict__)
-# print(variant.__dict__)
-# variant.region = 'usa'
-# print(variant.__dict__)
+variant.region = 'usa'
+# variant.name = 'd'
+print(variant.__dict__)
+print(variant.name)
+print(bool(variant.name))
+print(variant.bad)
+variant.year = '15'
+print(variant.name)
+print(bool(variant.name))
+print(variant.bad)
+
+
+
 # variant.region = 'ger'
 # variant_b.region = 'usa'
 # print(variant.__dict__)
