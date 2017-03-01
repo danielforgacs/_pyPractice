@@ -6,31 +6,25 @@ class Descriptor(object):
         return instance.__dict__[self.name]
 
     def __set__(self, instance, value):
-        # print(instance.__dict__)
-        instance.__dict__[self.name] = value
-
-class Opted(Descriptor):
-    def __set__(self, instance, value):
         if value not in self.opts:
             instance.__dict__['bad'] = instance.__dict__['bad'] | {self.name}
         else:
             instance.__dict__['bad'] = instance.__dict__['bad'] - {self.name}
-        super().__set__(instance, value)
-
-class Region(Opted):
-    opts = ('usa', 'ger')
-class Year(Opted):
-    opts = ('15', '16', '17')
+        instance.__dict__[self.name] = value
 
 class BadContainer(object):
     def __init__(self):
         self.bad = set()
 
+class Region(Descriptor):
+    opts = ('usa', 'ger')
+
+class Year(Descriptor):
+    opts = ('15', '16', '17')
+
 class VarName(BadContainer):
     region = Region(name='region')
     year = Year(name='year')
-
-
 
 variant = VarName()
 variant_b = VarName()
