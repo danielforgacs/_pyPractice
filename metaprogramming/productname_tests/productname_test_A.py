@@ -27,8 +27,19 @@ class SizedString(Descriptor):
             raise AttributeError('==> TOO LONG.')
         super().__set__(instance, value)
 
-class Chooser(StringTyped, SizedString):
+class ChooserMeta(StringTyped, SizedString):
+    def __new__(cls, name, bases, dict_):
+        return type(name, bases, dict_)
+
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
+
+
+class Chooser(metaclass=ChooserMeta):
     choices = ('AAA', 'BBB', 'c', 5)
+
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
 
     def __set__(self, instance, value):
         if value not in self.choices:
