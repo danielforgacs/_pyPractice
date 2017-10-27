@@ -1,17 +1,21 @@
 PROS = (
-    {'name': 'pro0', 'id': 0},
-    {'name': 'pro1', 'id': 1},
-    {'name': 'pro2', 'id': 2},
+    {'name': 'pro0', 'id': 0, 'client': 'cl0'},
+    {'name': 'pro1', 'id': 1, 'client': 'cl1'},
+    {'name': 'pro2', 'id': 2, 'client': 'cl2'},
 )
-VARS = [
+VARIS = [
+    {'name': 'var0', 'id': 0, 'area': 'aaa'},
+    {'name': 'var1', 'id': 1, 'area': 'bbb'},
+    {'name': 'var2', 'id': 2, 'area': 'ccc'},
 ]
 
 
 class Pros(object):
     def __get__(self, obj, objtype):
-        sgpros = obj.query(dbtype='PROS', filter=[])
+        sgpros = obj.sg.query(dbtype='PROS', filter=[])
         pros = []
         for prodict in sgpros:
+            prodict['sg'] = obj.sg
             newpro = Pro(**prodict)
             pros.append(newpro)
         return pros
@@ -19,7 +23,8 @@ class Pros(object):
 
 class Varis(object):
     def __get__(self, obj, objtype):
-        return [1, 2, 3]
+        sgpros = obj.sg.query(dbtype='VARIS', filter=[])
+        return sgpros
 
 
 class Pro(object):
@@ -44,6 +49,9 @@ class SG(object):
         return globals().get(dbtype)
     def __getitem__(self, index):
         return self.pros[index]
+    @property
+    def sg(self):
+        return self
 
 
 if __name__ == '__main__':
