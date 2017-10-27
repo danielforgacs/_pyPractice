@@ -46,7 +46,10 @@ class Pro(object):
 
 class Vari(object):
     def __init__(self, **kwargs):
-        pass
+        for attr, value in kwargs.items():
+            setattr(self, attr, value)
+    def __str__(self):
+        return '{} {}'.format(self.name, self.id)
 
 class SG(object):
     pros = Pros()
