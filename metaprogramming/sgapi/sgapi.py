@@ -34,5 +34,11 @@ class SG(object):
 if __name__ == '__main__':
     sg = SG(name='name', pid=555, key='4f*7')
 
+    print sg[1:3]
+    print sg[0]
+
     for pro in sg:
-        print pro
+        print '--> Pro:\n\t', pro
+
+        for var in pro:
+            print '\t--> Var:\n\t\t', var
