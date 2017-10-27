@@ -23,8 +23,13 @@ class Pros(object):
 
 class Varis(object):
     def __get__(self, obj, objtype):
-        sgpros = obj.sg.query(dbtype='VARIS', filter=[])
-        return sgpros
+        sgvaris = obj.sg.query(dbtype='VARIS', filter=[])
+        varis = []
+        for varidict in sgvaris:
+            varidict['sg'] = obj.sg
+            newvari = Vari(**varidict)
+            varis.append(newvari)
+        return varis
 
 
 class Pro(object):
@@ -38,6 +43,10 @@ class Pro(object):
     def __iter__(self):
         return iter(self.varis)
 
+
+class Vari(object):
+    def __init__(self, **kwargs):
+        pass
 
 class SG(object):
     pros = Pros()
