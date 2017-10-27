@@ -29,6 +29,8 @@ class SG(object):
         return iter(self.pros)
     def query(self, dbtype, filter, fileds=None):
         return globals().get(dbtype)
+    def __getitem__(self, index):
+        return self.pros[index]
 
 
 if __name__ == '__main__':
