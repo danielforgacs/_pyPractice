@@ -1,15 +1,11 @@
-PROS = [
+PROS = (
     {'name': 'pro0', 'id': 0},
     {'name': 'pro1', 'id': 1},
     {'name': 'pro2', 'id': 2},
+)
+VARS = [
 ]
 
-class Pro(object):
-    def __init__(self, **kwargs):
-        for attr, value in kwargs.items():
-            setattr(self, attr, value)
-    def __repr__(self):
-        return '{} {}'.format(self.name, self.id)
 
 class Pros(object):
     def __get__(self, obj, objtype):
@@ -19,6 +15,23 @@ class Pros(object):
             newpro = Pro(**prodict)
             pros.append(newpro)
         return pros
+
+
+class Varis(object):
+    def __get__(self, obj, objtype):
+        return [1, 2, 3]
+
+
+class Pro(object):
+    varis = Varis()
+
+    def __init__(self, **kwargs):
+        for attr, value in kwargs.items():
+            setattr(self, attr, value)
+    def __repr__(self):
+        return '{} {}'.format(self.name, self.id)
+    def __iter__(self):
+        return iter(self.varis)
 
 
 class SG(object):
@@ -42,5 +55,6 @@ if __name__ == '__main__':
     for pro in sg:
         print '--> Pro:\n\t', pro
 
-        for var in pro:
-            print '\t--> Var:\n\t\t', var
+        print '\t--> Varis:'
+        for vari in pro:
+            print '\t\t\t', vari
