@@ -4,9 +4,16 @@ PROS = [
     {'name': 'pro2', 'id': 2},
 ]
 
+class Pro(object):
+    pass
+
 class Pros(object):
     def __get__(self, obj, objtype):
-        pros = obj.query(dbtype='PROS', filter=[])
+        sgpros = obj.query(dbtype='PROS', filter=[])
+        pros = []
+        for pro in sgpros:
+            newpro = Pro()
+            pros.append(newpro)
         return pros
 
 class SG(object):
@@ -17,9 +24,6 @@ class SG(object):
         return iter(self.pros)
     def query(self, dbtype, filter, fileds=None):
         return globals().get(dbtype)
-
-
-
 
 
 if __name__ == '__main__':
