@@ -5,16 +5,21 @@ PROS = [
 ]
 
 class Pro(object):
-    pass
+    def __init__(self, **kwargs):
+        for attr, value in kwargs.items():
+            setattr(self, attr, value)
+    def __repr__(self):
+        return '{} {}'.format(self.name, self.id)
 
 class Pros(object):
     def __get__(self, obj, objtype):
         sgpros = obj.query(dbtype='PROS', filter=[])
         pros = []
-        for pro in sgpros:
-            newpro = Pro()
+        for prodict in sgpros:
+            newpro = Pro(**prodict)
             pros.append(newpro)
         return pros
+
 
 class SG(object):
     pros = Pros()
