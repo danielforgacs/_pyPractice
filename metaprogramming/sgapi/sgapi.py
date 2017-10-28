@@ -49,7 +49,10 @@ class Vari(object):
         for attr, value in kwargs.items():
             setattr(self, attr, value)
     def __str__(self):
-        return '{} {}'.format(self.name, self.id)
+        return '{} {} {}'.format(
+            self.name,
+            self.id,
+            self.area)
 
 class SG(object):
     pros = Pros()
