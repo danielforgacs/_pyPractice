@@ -110,4 +110,5 @@ if __name__ == '__main__':
         for vari in pro:
             print '\t\t', vari
 
-            # for ass in vari
+            for ass in vari:
+                print '\t\t', ass
