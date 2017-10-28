@@ -1,5 +1,8 @@
+import abc
+
 class DiagnosticBase(object):
-    pass
+    __metaclass__ = abc.ABCMeta
+
+    @abc.abstractmethod
     def runner(self, report):
-        # return report + '\n' + str(self.__class__)
-        return '\n' + str(self.__class__)
+        return str(self.__class__)

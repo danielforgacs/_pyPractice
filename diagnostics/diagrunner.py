@@ -19,7 +19,7 @@ report = '.start'
 
 for check in checklist:
     c = check()
-    report += c.runner(report=report)
+    report += '\n' + c.runner(report=report)
 
 report += '\n.end'
 print report

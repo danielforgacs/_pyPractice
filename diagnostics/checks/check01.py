@@ -2,8 +2,8 @@ import baseclass
 
 
 class CheckFirst(baseclass.DiagnosticBase):
-    pass
-
+    def runner(self, report):
+        return str(self)
 
 class EmptyClass(object):
     pass

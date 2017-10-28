@@ -2,8 +2,8 @@ import baseclass
 
 
 class MiscCheck(baseclass.DiagnosticBase):
-    pass
-
+    def runner(self, report):
+        return str(self)
 
 class DetailedClass(object):
     pass
@@ -11,8 +11,3 @@ class DetailedClass(object):
 
 class GuruClass(DetailedClass):
     pass
-
-
-# print issubclass(CheckSecondExtension, CheckSecond)
-# print issubclass(CheckFirst, baseclass.DiagnosticBase)
-# print issubclass(CheckSecond, baseclass.DiagnosticBase)
