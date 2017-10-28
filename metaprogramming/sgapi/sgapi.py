@@ -55,7 +55,7 @@ class Asses(object):
 
 class Pubs(object):
     def __get__(self, obj, objtype):
-        sgpubs = obj.sg.query(dbtype='ASSES', filter=[])
+        sgpubs = obj.sg.query(dbtype='PUBS', filter=[])
         pubs = []
         for pubdict in sgpubs:
             pubdict['sg'] = obj.sg
@@ -96,6 +96,7 @@ class Vari(object):
 
 class Ass(object):
     pubs = Pubs()
+
     def __init__(self, **kwargs):
         for attr, value in kwargs.items():
             setattr(self, attr, value)
@@ -104,6 +105,8 @@ class Ass(object):
             self.name,
             self.id,
             self.colour)
+    def __iter__(self):
+        return iter(self.pubs)
 
 
 class SG(object):
@@ -132,6 +135,8 @@ if __name__ == '__main__':
     print
     print sg.pros[0].varis[1].asses[2]
     print
+    print sg.pros[0].varis[1].asses[2].pubs
+    print
 
     for pro in sg:
         print '--> Pro:', pro
@@ -144,7 +149,8 @@ if __name__ == '__main__':
             for ass in vari:
                 print '\t\t\t', ass
 
-                for pub in pubs:
-                    print pub
+                print '\t\t\t--> pubs:'
+                for pub in ass:
+                    print '\t\t\t\t', pub
 
             print
