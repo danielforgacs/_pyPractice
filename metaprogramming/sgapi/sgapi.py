@@ -43,8 +43,8 @@ class Asses(object):
         asses = []
         for assdict in sgasses:
             assdict['sg'] = obj.sg
-            # newass = Vari(**assdict)
-            newass = assdict
+            newass = Ass(**assdict)
+            # newass = assdict
             asses.append(newass)
         return asses
 
@@ -76,6 +76,12 @@ class Vari(object):
             self.area)
     def __getitem__(self, index):
         return self.asses[index]
+
+
+class Ass(object):
+    def __init__(self, **kwargs):
+        for attr, value in kwargs.items():
+            setattr(self, attr, value)
 
 
 class SG(object):
