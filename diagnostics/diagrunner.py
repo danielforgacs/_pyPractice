@@ -2,6 +2,8 @@ import checks
 import types
 import baseclass
 
+print dir()
+
 # for name, item in vars(checks).items():
 #     if isinstance(item, types.ModuleType):
 #         for key, value in vars(item).items():
