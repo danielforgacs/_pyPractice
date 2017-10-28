@@ -112,6 +112,8 @@ if __name__ == '__main__':
     print sg[0][1]
     print sg[0][1][:2]
     print
+    print sg.pros[0].varis[1].asses[2]
+    print
 
     for pro in sg:
         print '--> Pro:', pro
