@@ -136,17 +136,6 @@ class SG(object):
 if __name__ == '__main__':
     sg = SG(name='name', pid=555, key='4f*7')
 
-    print sg[1:3]
-    print sg[0]
-    print sg[0][:3]
-    print sg[0][1]
-    print sg[0][1][:2]
-    print
-    print sg.pros[0].varis[1].asses[2]
-    print
-    print sg.pros[0].varis[1].asses[2].pubs
-    print
-
     for pro in sg:
         print '--> Pro:', pro
 
