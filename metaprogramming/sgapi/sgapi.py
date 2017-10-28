@@ -44,7 +44,6 @@ class Asses(object):
         for assdict in sgasses:
             assdict['sg'] = obj.sg
             newass = Ass(**assdict)
-            # newass = assdict
             asses.append(newass)
         return asses
 
@@ -82,6 +81,11 @@ class Ass(object):
     def __init__(self, **kwargs):
         for attr, value in kwargs.items():
             setattr(self, attr, value)
+    def __str__(self):
+        return '{} {} {}'.format(
+            self.name,
+            self.id,
+            self.colour)
 
 
 class SG(object):
@@ -117,4 +121,4 @@ if __name__ == '__main__':
             print '\t\t', vari
 
             for ass in vari:
-                print '\t\t', ass
+                print '\t\t\t', ass
