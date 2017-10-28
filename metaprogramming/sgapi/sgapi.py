@@ -8,6 +8,11 @@ VARIS = [
     {'name': 'var1', 'id': 1, 'area': 'bbb'},
     {'name': 'var2', 'id': 2, 'area': 'ccc'},
 ]
+ASSES = [
+    {'name': 'ass0', 'id': 0, 'colour': 'R'},
+    {'name': 'ass1', 'id': 1, 'colour': 'G'},
+    {'name': 'ass2', 'id': 2, 'colour': 'B'},
+]
 
 
 class Pros(object):
@@ -32,6 +37,18 @@ class Varis(object):
         return varis
 
 
+class Asses(object):
+    def __get__(self, obj, objtype):
+        sgasses = obj.sg.query(dbtype='ASSES', filter=[])
+        asses = []
+        for assdict in sgasses:
+            assdict['sg'] = obj.sg
+            # newass = Vari(**assdict)
+            newass = assdict
+            asses.append(newass)
+        return asses
+
+
 class Pro(object):
     varis = Varis()
 
@@ -42,9 +59,13 @@ class Pro(object):
         return '{} {}'.format(self.name, self.id)
     def __iter__(self):
         return iter(self.varis)
+    def __getitem__(self, index):
+        return self.varis[index]
 
 
 class Vari(object):
+    asses = Asses()
+
     def __init__(self, **kwargs):
         for attr, value in kwargs.items():
             setattr(self, attr, value)
@@ -53,6 +74,9 @@ class Vari(object):
             self.name,
             self.id,
             self.area)
+    def __getitem__(self, index):
+        return self.asses[index]
+
 
 class SG(object):
     pros = Pros()
@@ -74,6 +98,10 @@ if __name__ == '__main__':
 
     print sg[1:3]
     print sg[0]
+    print sg[0][:3]
+    print sg[0][1]
+    print sg[0][1][:2]
+    print
 
     for pro in sg:
         print '--> Pro:\n\t', pro
@@ -81,3 +109,5 @@ if __name__ == '__main__':
         print '\t--> Varis:'
         for vari in pro:
             print '\t\t', vari
+
+            # for ass in vari
