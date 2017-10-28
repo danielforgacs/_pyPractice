@@ -13,6 +13,11 @@ ASSES = [
     {'name': 'ass1', 'id': 1, 'colour': 'G'},
     {'name': 'ass2', 'id': 2, 'colour': 'B'},
 ]
+PUBS = [
+    {'name': 'pub0', 'id': 0, 'path': 'a:/'},
+    {'name': 'pub1', 'id': 1, 'path': 'b:/'},
+    {'name': 'pub2', 'id': 2, 'path': 'Bc:/'},
+]
 
 
 class Pros(object):
@@ -48,6 +53,18 @@ class Asses(object):
         return asses
 
 
+class Pubs(object):
+    def __get__(self, obj, objtype):
+        sgpubs = obj.sg.query(dbtype='ASSES', filter=[])
+        pubs = []
+        for pubdict in sgpubs:
+            pubdict['sg'] = obj.sg
+            newpub = pubdict
+            # newpub = Ass(**pubdict)
+            pubs.append(newpub)
+        return pubs
+
+
 class Pro(object):
     varis = Varis()
 
@@ -78,6 +95,7 @@ class Vari(object):
 
 
 class Ass(object):
+    pubs = Pubs()
     def __init__(self, **kwargs):
         for attr, value in kwargs.items():
             setattr(self, attr, value)
@@ -125,4 +143,8 @@ if __name__ == '__main__':
             print '\t\t--> asses:'
             for ass in vari:
                 print '\t\t\t', ass
+
+                for pub in pubs:
+                    print pub
+
             print
