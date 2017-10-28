@@ -1,4 +1,7 @@
 import checks
+import types
 
 for name, item in vars(checks).items():
-    print name, type(item)
+    if isinstance(item, types.ModuleType):
+        for key, value in vars(item).items():
+            print key, isinstance(key, object)
