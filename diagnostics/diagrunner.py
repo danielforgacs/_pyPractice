@@ -15,5 +15,11 @@ for name, item in vars(checks).items():
             if issubclass(value, baseclass.DiagnosticBase):
                 checklist.append(value)
 
+report = '.start'
 
-print checklist
+for check in checklist:
+    c = check()
+    report += c.runner(report=report)
+
+report += '\n.end'
+print report

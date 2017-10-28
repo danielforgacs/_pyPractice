@@ -5,14 +5,9 @@ class CheckFirst(baseclass.DiagnosticBase):
     pass
 
 
-class CheckSecond(object):
+class EmptyClass(object):
     pass
 
 
-class CheckSecondExtension(CheckSecond):
+class SecondExtensionClass(EmptyClass):
     pass
-
-
-# print issubclass(CheckSecondExtension, CheckSecond)
-# print issubclass(CheckFirst, baseclass.DiagnosticBase)
-# print issubclass(CheckSecond, baseclass.DiagnosticBase)

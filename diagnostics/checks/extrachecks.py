@@ -5,11 +5,11 @@ class MiscCheck(baseclass.DiagnosticBase):
     pass
 
 
-class DetailedCheck(object):
+class DetailedClass(object):
     pass
 
 
-class GuruCheck(DetailedCheck):
+class GuruClass(DetailedClass):
     pass
 
 
