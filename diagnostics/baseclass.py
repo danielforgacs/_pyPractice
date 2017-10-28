@@ -1,0 +1,2 @@
+class DiagnosticBase(object):
+    pass
