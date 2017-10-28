@@ -114,11 +114,13 @@ if __name__ == '__main__':
     print
 
     for pro in sg:
-        print '--> Pro:\n\t', pro
+        print '--> Pro:', pro
 
         print '\t--> Varis:'
         for vari in pro:
             print '\t\t', vari
 
+            print '\t\t--> asses:'
             for ass in vari:
                 print '\t\t\t', ass
+            print
