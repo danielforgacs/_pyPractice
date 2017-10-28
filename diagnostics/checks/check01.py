@@ -1,9 +1,2 @@
-print 'kjhgkjhg'
-print 'kjhgkjhg'
-print 'kjhgkjhg'
-print 'kjhgkjhg'
-
-
-
-def check_01():
+class check_blabl(object):
     pass
