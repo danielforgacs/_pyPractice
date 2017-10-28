@@ -22,7 +22,9 @@ PUBS = [
 
 class Pros(object):
     def __get__(self, obj, objtype):
-        sgpros = obj.sg.query(dbtype='PROS', filter=[])
+        sgpros = obj.sg.query(
+            dbtype='PROS',
+            filter=[])
         pros = []
         for prodict in sgpros:
             prodict['sg'] = obj.sg
@@ -33,7 +35,9 @@ class Pros(object):
 
 class Varis(object):
     def __get__(self, obj, objtype):
-        sgvaris = obj.sg.query(dbtype='VARIS', filter=[])
+        sgvaris = obj.sg.query(
+            dbtype='VARIS',
+            filter=[])
         varis = []
         for varidict in sgvaris:
             varidict['sg'] = obj.sg
@@ -44,7 +48,9 @@ class Varis(object):
 
 class Asses(object):
     def __get__(self, obj, objtype):
-        sgasses = obj.sg.query(dbtype='ASSES', filter=[])
+        sgasses = obj.sg.query(
+            dbtype='ASSES',
+            filter=[])
         asses = []
         for assdict in sgasses:
             assdict['sg'] = obj.sg
@@ -55,7 +61,9 @@ class Asses(object):
 
 class Pubs(object):
     def __get__(self, obj, objtype):
-        sgpubs = obj.sg.query(dbtype='PUBS', filter=[])
+        sgpubs = obj.sg.query(
+            dbtype='PUBS',
+            filter=[])
         pubs = []
         for pubdict in sgpubs:
             pubdict['sg'] = obj.sg
@@ -72,7 +80,8 @@ class Pro(object):
         for attr, value in kwargs.items():
             setattr(self, attr, value)
     def __repr__(self):
-        return '{} {}'.format(self.name, self.id)
+        return '{} {}'.format(
+            self.name, self.id)
     def __iter__(self):
         return iter(self.varis)
     def __getitem__(self, index):
