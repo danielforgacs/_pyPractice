@@ -80,4 +80,4 @@ if __name__ == '__main__':
 
         print '\t--> Varis:'
         for vari in pro:
-            print '\t\t\t', vari
+            print '\t\t', vari
