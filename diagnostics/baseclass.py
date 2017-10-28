@@ -6,3 +6,7 @@ class DiagnosticBase(object):
     @abc.abstractmethod
     def runner(self, report):
         return str(self.__class__)
+
+
+class K(DiagnosticBase):
+    pass
