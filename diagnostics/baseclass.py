@@ -1,13 +1,18 @@
 import abc
 
 class DiagnosticBase(object):
+    __metaclass__ = abc.ABCMeta
+
     def __init__(self, reportobj):
         self._report = reportobj
-    # __metaclass__ = abc.ABCMeta
 
+    # @abc.abstractmethod
     def run_test(self):
-        pass
+        return self._report
 
     @property
     def report(self):
-        return self._report
+        result = self.run_test()
+        if type(result) != type(self._report):
+            raise AttributeError('RUN_TEST MUST RETURN REPORT!')
+        return result
