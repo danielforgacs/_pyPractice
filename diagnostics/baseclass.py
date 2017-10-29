@@ -1,18 +1,23 @@
 import abc
 
-class DiagnosticBase(object):
-    __metaclass__ = abc.ABCMeta
+class ReportDescriptor(object):
+    def __set__(self, obj, value):
+        print '--setting report', obj
+        result = obj.run_test(report=value)
+        obj.__dict__['report'] = result
 
-    def __init__(self, reportobj):
-        self._report = reportobj
+    def __get__(self, obj, objtype):
+        print '--getting report', obj
+        return obj.__dict__['report']
+
+
+class DiagnosticBase(object):
+    # __metaclass__ = abc.ABCMeta
+    report = ReportDescriptor()
+
+    def __init__(self, report):
+        self.report = report
 
     # @abc.abstractmethod
-    def run_test(self):
-        return self._report
-
-    @property
-    def report(self):
-        result = self.run_test()
-        if type(result) != type(self._report):
-            raise AttributeError('RUN_TEST MUST RETURN REPORT!')
-        return result
+    # def run_test(self):
+    #     pass

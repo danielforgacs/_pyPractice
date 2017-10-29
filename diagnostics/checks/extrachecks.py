@@ -1,11 +1,11 @@
-import baseclass
+# import baseclass
 
 
-class MiscCheck(baseclass.DiagnosticBase):
-    pass
+# class MiscCheck(baseclass.DiagnosticBase):
+#     pass
 
-class DetailedClass(object):
-    pass
+# class DetailedClass(object):
+#     pass
 
-class GuruClass(DetailedClass):
-    pass
+# class GuruClass(DetailedClass):
+#     pass
