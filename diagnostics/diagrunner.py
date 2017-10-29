@@ -10,7 +10,7 @@ class Report(object):
 report = Report()
 
 for check in baseclass.DiagnosticBase.__subclasses__():
-    c = check(report=report)
+    c = check(reportobj=report)
     c.run_test()
     report = c.report
 
