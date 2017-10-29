@@ -3,23 +3,14 @@ import types
 import baseclass
 
 
-checklist = []
+class Report(object):
+    def __init__(self):
+        self.text = '.report start.'
 
-for name, item in vars(checks).items():
-    if isinstance(item, types.ModuleType):
-        for key, value in vars(item).items():
-            if key.startswith('_'):
-                continue
-            if isinstance(value, types.ModuleType):
-                continue
-            if issubclass(value, baseclass.DiagnosticBase):
-                checklist.append(value)
+report = Report()
 
-report = '.start'
+for check in baseclass.DiagnosticBase.__subclasses__():
+    c = check(report=report)
+    report = c.report
 
-for check in checklist:
-    c = check()
-    report += '\n' + c.runner(report=report)
-
-report += '\n.end'
-print report
+print report.text
