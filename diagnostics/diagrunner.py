@@ -11,6 +11,7 @@ report = Report()
 
 for check in baseclass.DiagnosticBase.__subclasses__():
     c = check(report=report)
+    c.run_test()
     report = c.report
 
 print report.text

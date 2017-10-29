@@ -1,8 +1,9 @@
 import abc
 
 class DiagnosticBase(object):
-    __metaclass__ = abc.ABCMeta
+    def __init__(self, report):
+        self.report = report
+    # __metaclass__ = abc.ABCMeta
 
-    @abc.abstractmethod
-    def runner(self, report):
+    def run_test(self):
         pass
