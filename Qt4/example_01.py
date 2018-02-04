@@ -37,10 +37,15 @@ class MainLayout(QtGui.QVBoxLayout):
         super(MainLayout, self).__init__()
         listview = RepoList()
         listfilter = QtGui.QLineEdit()
-        listfilter.textChanged.connect(
-            listview.proxymodel.setFilterFixedString)
+        btnshowsel = QtGui.QPushButton('show selection')
+
+        self.addWidget(btnshowsel)
         self.addWidget(listfilter)
         self.addWidget(listview)
+
+        listfilter.textChanged.connect(
+            listview.proxymodel.setFilterFixedString)
+        btnshowsel.pressed.connect(lambda: listview.selected(1))
 
 
 class MainSimple(QtGui.QWidget):
