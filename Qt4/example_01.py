@@ -18,6 +18,12 @@ class RepoList(QtGui.QListView):
         super(RepoList, self).__init__()
         model = RepoModel()
         self.setModel(model)
+        selmodel = self.selectionModel()
+        selmodel.selectionChanged.connect(self.selected)
+
+    def selected(self):
+        print 'jh'
+
 
 
 class MainLayout(QtGui.QVBoxLayout):
