@@ -21,16 +21,15 @@ class RepoList(QtGui.QListView):
         self.proxymodel.setSourceModel(model)
         self.setModel(self.proxymodel)
         selmodel = self.selectionModel()
-        selmodel.selectionChanged.connect(self.selected)
+        selmodel.selectionChanged.connect(self.get_selected)
 
-    def selected(self, args):
-        indexes = args.indexes()
-        index = indexes[0]
+    def get_selected(self):
+        selindexes = self.selectedIndexes()
+        index = selindexes[0]
         qtdata = index.data()
         data = qtdata.toPyObject()
         selected = str(data)
         print data
-
 
 class MainLayout(QtGui.QVBoxLayout):
     def __init__(self):
@@ -43,9 +42,8 @@ class MainLayout(QtGui.QVBoxLayout):
         self.addWidget(listfilter)
         self.addWidget(listview)
 
-        listfilter.textChanged.connect(
-            listview.proxymodel.setFilterFixedString)
-        btnshowsel.pressed.connect(lambda: listview.selected(1))
+        listfilter.textChanged.connect(listview.proxymodel.setFilterFixedString)
+        btnshowsel.pressed.connect(listview.get_selected)
 
 
 class MainSimple(QtGui.QWidget):
