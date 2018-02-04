@@ -1,3 +1,4 @@
+import os
 import sys
 from PyQt4 import QtGui
 
@@ -8,10 +9,8 @@ ROOT_DIR = '/home/ford/Documents/dev'
 class RepoModel(QtGui.QStandardItemModel):
     def __init__(self):
         super(RepoModel, self).__init__()
-        self.appendRow(QtGui.QStandardItem('A'))
-        self.appendRow(QtGui.QStandardItem('B'))
-        self.appendRow(QtGui.QStandardItem('C'))
-        self.appendRow(QtGui.QStandardItem('E'))
+        for item in os.listdir(ROOT_DIR):
+            self.appendRow(QtGui.QStandardItem(item))
 
 
 class RepoList(QtGui.QListView):
