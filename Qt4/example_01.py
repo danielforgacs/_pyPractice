@@ -21,15 +21,13 @@ class RepoList(QtGui.QListView):
         selmodel = self.selectionModel()
         selmodel.selectionChanged.connect(self.selected)
 
-    def selected(self, *args, **kwargs):
-        print 'arg count:', len(args)
-
-        for arg in args:
-            # print dir(arg)
-            # print arg.indexes()
-            for index in arg.indexes():
-                print index
-
+    def selected(self, args):
+        indexes = args.indexes()
+        index = indexes[0]
+        qtdata = index.data()
+        data = qtdata.toPyObject()
+        selected = str(data)
+        print data
 
 
 class MainLayout(QtGui.QVBoxLayout):
