@@ -37,7 +37,8 @@ class MainLayout(QtGui.QVBoxLayout):
         super(MainLayout, self).__init__()
         listview = RepoList()
         listfilter = QtGui.QLineEdit()
-        listfilter.textChanged.connect(listview.proxymodel.setFilterFixedString)
+        listfilter.textChanged.connect(
+            listview.proxymodel.setFilterFixedString)
         self.addWidget(listfilter)
         self.addWidget(listview)
 
