@@ -17,9 +17,9 @@ class RepoList(QtGui.QListView):
     def __init__(self):
         super(RepoList, self).__init__()
         model = RepoModel()
-        proxymodel = QtGui.QSortFilterProxyModel()
-        proxymodel.setSourceModel(model)
-        self.setModel(proxymodel)
+        self.proxymodel = QtGui.QSortFilterProxyModel()
+        self.proxymodel.setSourceModel(model)
+        self.setModel(self.proxymodel)
         selmodel = self.selectionModel()
         selmodel.selectionChanged.connect(self.selected)
 
@@ -36,6 +36,9 @@ class MainLayout(QtGui.QVBoxLayout):
     def __init__(self):
         super(MainLayout, self).__init__()
         listview = RepoList()
+        listfilter = QtGui.QLineEdit()
+        listfilter.textChanged.connect(listview.proxymodel.setFilterFixedString)
+        self.addWidget(listfilter)
         self.addWidget(listview)
 
 
