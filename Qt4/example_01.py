@@ -17,7 +17,9 @@ class RepoList(QtGui.QListView):
     def __init__(self):
         super(RepoList, self).__init__()
         model = RepoModel()
-        self.setModel(model)
+        proxymodel = QtGui.QSortFilterProxyModel()
+        proxymodel.setSourceModel(model)
+        self.setModel(proxymodel)
         selmodel = self.selectionModel()
         selmodel.selectionChanged.connect(self.selected)
 
