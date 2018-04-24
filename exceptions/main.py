@@ -3,6 +3,12 @@ import m1
 import m2
 import m3
 
+try:
+    import mx
+except ImportError as error:
+    print('!ERROR:', error)
+    mx = None
+
 
 def func_main():
     pass
