@@ -1,7 +1,11 @@
 import err
 import m1
-import m2
 import m3
+
+try:
+    import m2
+except:
+    pass
 
 try:
     import mx
@@ -19,7 +23,11 @@ def main():
     print('main.func_main')
     func_main()
     m1.func_m1()
-    m2.func_m2()
+
+    try:
+        m2.func_m2()
+    except Exception as error:
+        print(error)
 
 
 if __name__ == '__main__':
