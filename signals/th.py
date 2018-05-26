@@ -1,3 +1,12 @@
+"""
+threading example module.
+
+it needs a file called: "watchdir/watchfile.txt".
+run this in a terminal then start modifying the file
+and check for the thread to react when it's saved.
+"""
+
+
 import threading
 import time
 
@@ -19,7 +28,7 @@ class Watcher(threading.Thread):
                 self.target = targetfile.read()
 
             if self.target != self.target0:
-                print('changed')
+                print('.CHANGED.')
                 self.target0 = self.target
 
             time.sleep(0.3)
@@ -30,7 +39,7 @@ def main():
     w.start()
 
     for k in range(10):
-        print('counting:', k)
+        print('running...:', k)
         time.sleep(0.8)
 
 
