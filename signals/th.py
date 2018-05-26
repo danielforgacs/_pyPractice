@@ -25,5 +25,15 @@ class Watcher(threading.Thread):
             time.sleep(0.3)
 
 
-w = Watcher()
-w.start()
+def main():
+    w = Watcher()
+    w.start()
+
+    for k in range(10):
+        print('counting:', k)
+        time.sleep(0.8)
+
+
+
+if __name__ == '__main__':
+    main()
