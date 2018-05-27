@@ -13,6 +13,7 @@ import time
 class Watcher(threading.Thread):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.is_active = True
 
         with open('watchdir/watchfile.txt', 'r') as targetfile:
             self.target0 = targetfile.read()
@@ -21,7 +22,7 @@ class Watcher(threading.Thread):
     def run(self):
         k = 0
 
-        while k < 150:
+        while k < 250 and self.is_active:
             k += 1
 
             with open('watchdir/watchfile.txt', 'r') as targetfile:
@@ -34,13 +35,19 @@ class Watcher(threading.Thread):
             time.sleep(0.3)
 
 
+    def deactivate(self):
+        self.is_active = False
+
+
 def main():
     w = Watcher()
     w.start()
 
-    for k in range(10):
+    for k in range(30):
         print('running...:', k)
         time.sleep(0.8)
+
+    w.deactivate()
 
 
 
