@@ -11,10 +11,11 @@ import threading
 import time
 
 class Watcher(threading.Thread):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, sleep, *args, **kwargs):
         super().__init__(*args, **kwargs)
         print('\t--INIT--')
         self.is_active = True
+        self.sleep = sleep
 
         with open('watchdir/watchfile.txt', 'r') as targetfile:
             self.target0 = targetfile.read()
@@ -37,32 +38,36 @@ class Watcher(threading.Thread):
                 print('.CHANGED.')
                 self.target0 = self.target
 
-            time.sleep(1)
+            time.sleep(self.sleep)
 
 
     def deactivate(self):
         self.is_active = False
 
 
-class SafeWatcher(Watcher):
-    def __enter__(self):
-        return self
+# class SafeWatcher(Watcher):
+#     def __enter__(self):
+#         return self
 
-    def __exit__(self, *args, **kwargs):
-        self.deactivate()
+#     def __exit__(self, *args, **kwargs):
+#         self.deactivate()
 
 
 
 def main():
-    w = Watcher()
+    MAX_MAIN_LOOP = 30
+    MAIN_SLEEP = 1
+    THREAD_SLEEP = 1
+
+    w = Watcher(sleep=THREAD_SLEEP)
     w.start()
 
     # with SafeWatcher() as w:
     #     w.start()
 
-    for k in range(30):
+    for k in range(MAX_MAIN_LOOP):
         print('\trunning...:', k)
-        time.sleep(0.1)
+        time.sleep(MAIN_SLEEP)
 
     w.deactivate()
 
