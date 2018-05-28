@@ -23,9 +23,10 @@ class Watcher(threading.Thread):
     def run(self):
         print('\t--RUN--')
         k = 0
+        loopmax = 50
 
-        while k < 250 and self.is_active:
-            print('\t--THREAD LOOP--')
+        while k < loopmax and self.is_active:
+            print('\t-- THREAD LOOP:', loopmax-k, '--')
             k += 1
 
             with open('watchdir/watchfile.txt', 'r') as targetfile:
@@ -35,7 +36,7 @@ class Watcher(threading.Thread):
                 print('.CHANGED.')
                 self.target0 = self.target
 
-            time.sleep(0.3)
+            time.sleep(1)
 
 
     def deactivate(self):
