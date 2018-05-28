@@ -23,10 +23,11 @@ class Watcher(threading.Thread):
     def run(self):
         print('\t--RUN--')
         k = 0
-        loopmax = 50
+        # loopmax = 50
 
-        while k < loopmax and self.is_active:
-            print('\t-- THREAD LOOP:', loopmax-k, '--')
+        # while k < loopmax and self.is_active:
+        while self.is_active:
+            print('\t\t-- thread loop --')
             k += 1
 
             with open('watchdir/watchfile.txt', 'r') as targetfile:
@@ -61,7 +62,7 @@ def main():
 
     for k in range(30):
         print('\trunning...:', k)
-        time.sleep(0.8)
+        time.sleep(0.1)
 
     w.deactivate()
 
