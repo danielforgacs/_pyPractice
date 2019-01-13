@@ -1,21 +1,30 @@
 import pytest
 import time
 
+WAIT_SECS = 2
+
 
 @pytest.fixture(scope="module")
+# @pytest.fixture()
 def module_fixture():
-    print('\n:: module_fixture')
+    print('\n\n::: MODULE_FIXTURE')
+    time.sleep(WAIT_SECS)
+    print('::: MODULE_FIXTURE - DONE')
     return 5
 
 
 
+@pytest.fixture(scope="class")
+# @pytest.fixture()
+def class_fixture():
+    print('\n\n::: CLASS_FIXTURE')
+    time.sleep(WAIT_SECS)
+    print('::: CLASS_FIXTURE - DONE')
+    return 6
+
+
 
 class TestClass_TestStuff:
-    @pytest.fixture(scope="class")
-    def class_fixture(self):
-        print('\n::: class_fixture')
-        return 6
-
     def test_cls_01(self, class_fixture):
         assert class_fixture == 6
 
@@ -27,8 +36,6 @@ class TestClass_TestStuff:
 
     def test_cls_04(self, class_fixture):
         assert class_fixture == 6
-
-
 
 
 
@@ -55,5 +62,4 @@ def test_things_05(module_fixture):
 if __name__ == '__main__':
     pytest.main([
         __file__,
-        '-s',
     ])
