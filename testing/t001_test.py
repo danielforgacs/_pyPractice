@@ -3,8 +3,8 @@ import time
 
 
 @pytest.fixture(scope="module")
-def results():
-    print('\n:: results')
+def module_fixture():
+    print('\n:: module_fixture')
     return 5
 
 
@@ -12,41 +12,41 @@ def results():
 
 class TestClass_TestStuff:
     @pytest.fixture(scope="class")
-    def runonce(self):
-        print('\n::: runonce')
+    def class_fixture(self):
+        print('\n::: class_fixture')
         return 6
 
-    def test_cls_01(self, runonce):
-        assert runonce == 6
+    def test_cls_01(self, class_fixture):
+        assert class_fixture == 6
 
-    def test_cls_02(self, runonce):
-        assert runonce == 6
+    def test_cls_02(self, class_fixture):
+        assert class_fixture == 6
 
-    def test_cls_03(self, runonce):
-        assert runonce == 6
+    def test_cls_03(self, class_fixture):
+        assert class_fixture == 6
 
-    def test_cls_04(self, runonce):
-        assert runonce == 6
-
-
+    def test_cls_04(self, class_fixture):
+        assert class_fixture == 6
 
 
 
 
-def test_things_01(results):
-    assert results == 5
 
-def test_things_02(results):
-    assert results == 5
 
-def test_things_03(results):
-    assert results == 5
+def test_things_01(module_fixture):
+    assert module_fixture == 5
 
-def test_things_04(results):
-    assert results == 5
+def test_things_02(module_fixture):
+    assert module_fixture == 5
 
-def test_things_05(results):
-    assert results == 5
+def test_things_03(module_fixture):
+    assert module_fixture == 5
+
+def test_things_04(module_fixture):
+    assert module_fixture == 5
+
+def test_things_05(module_fixture):
+    assert module_fixture == 5
 
 
 
@@ -55,5 +55,5 @@ def test_things_05(results):
 if __name__ == '__main__':
     pytest.main([
         __file__,
-        # '-s',
+        '-s',
     ])
