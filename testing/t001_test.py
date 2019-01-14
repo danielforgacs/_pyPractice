@@ -1,26 +1,28 @@
 import pytest
 import time
+from datetime import datetime
+
 
 WAIT_SECS = 5
-
-
-@pytest.fixture(scope="module")
-# @pytest.fixture()
-def module_fixture():
-    print('\n\n::: MODULE_FIXTURE')
-    time.sleep(WAIT_SECS)
-    print('::: MODULE_FIXTURE - DONE')
-    return 5
-
 
 
 @pytest.fixture(scope="class")
 # @pytest.fixture()
 def class_fixture():
-    print('\n\n::: CLASS_FIXTURE')
+    print('\n\n::: CLASS_FIXTURE. -\t\t', datetime.now())
     time.sleep(WAIT_SECS)
-    print('::: CLASS_FIXTURE - DONE')
+    print('::: CLASS_FIXTURE - DONE. -\t', datetime.now())
     return 6
+
+
+
+@pytest.fixture(scope="module")
+# @pytest.fixture()
+def module_fixture():
+    print('\n\n::: MODULE_FIXTURE. -\t\t', datetime.now())
+    time.sleep(WAIT_SECS)
+    print('::: MODULE_FIXTURE - DONE. -\t', datetime.now())
+    return 5
 
 
 
