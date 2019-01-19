@@ -8,16 +8,7 @@ db = {
     5: {55: {555: 55555}}
 }
 
-# if isinstance({'1': {'2': {'3': '4'}}}, dict):
-#         key = '1'
-#         if isinstance({'2': {'3': '4'}}, dict):
-#             key = '1_2'
-#             if isinstance({'3': '4'}, dict):
-#                 key = '1_2_3'
-#                 if isinstance('4', dict):
-#                     pass
-#                 else:
-#                     newdict = {'1_2_3': '4'}
+
 
 def flatter(dict_, basekey='', newdict={}):
     for key, value in dict_.items():
@@ -37,6 +28,7 @@ def flatter(dict_, basekey='', newdict={}):
 
 
 
+print(db)
 result = flatter(db)
 print(list(result.keys()))
 print(list(result.values()))
