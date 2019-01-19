@@ -13,4 +13,4 @@ for check in baseclass.DiagnosticBase.__subclasses__():
     c = check(report=report)
     report = c.report
 
-print report.text
+print(report.text)
