@@ -10,7 +10,14 @@ class XMLDoc:
         assert os.path.isfile(xmlfile)
 
         xmltree = ElementTree.parse(xmlfile)
+        print(type(xmltree))
         print(dir(xmltree))
+        treeroot = xmltree.getroot()
+        print(type(treeroot))
+        print(dir(treeroot))
+        print(treeroot.tag)
+
+        print(len(treeroot))
 
 
 if __name__ == '__main__':
