@@ -7,5 +7,17 @@ def g():
 
 
 
-for j in g():
-    print(j)
+# for j in g():
+#     print(j)
+
+k = g()
+print(k)
+print(k)
+
+print(next(k))
+print(next(k))
+print(next(k))
+print(next(k))
+
+for s in k:
+    print(s)
