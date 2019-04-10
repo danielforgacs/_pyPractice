@@ -1,6 +1,4 @@
-"""
-add a line to make it work.
-"""
+# Add a line to make it work.
 
 class C(object):
     pass
