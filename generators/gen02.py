@@ -13,6 +13,13 @@ def tim():
         starttime = datetime.now()
 
 
+def func():
+        print('func')
+        time.sleep(0.5)
+        next(timer)
+
+
+
 timer = tim()
 next(timer)
 next(timer)
@@ -26,3 +33,12 @@ next(timer)
 
 for k in list('ABCDE'):
     next(timer)
+
+func()
+func()
+
+
+for k in list('ABCDE'):
+    next(timer)
+    time.sleep(0.25)
+    func()
