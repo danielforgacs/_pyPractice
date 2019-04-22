@@ -6,18 +6,25 @@ def g():
         a -= 1
 
 
+class G(object):
+    def __iter__(self):
+        return iter(list('abcds'))
 
-# for j in g():
-#     print(j)
 
-k = g()
-print(k)
-print(k)
+class F(object):
+    def __next__(self):
+        yield 1
+    # def __iter__(self):
+    #     return iter(list('abcds'))
 
-print(next(k))
-print(next(k))
-print(next(k))
-print(next(k))
 
-for s in k:
-    print(s)
+
+for k in G():
+    print(k)
+
+
+# for k in F():
+#     print(k)
+
+qw = F()
+print(next(qw))
